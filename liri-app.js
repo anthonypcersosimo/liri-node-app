@@ -39,25 +39,26 @@ else if (command === "spotify-this-song") {
     console.log("Searching for Song");
 }
 else if (command === "movie-this") {
-    var findShow = function(request) {
+    var findShow = function(req) {
         // The following URL can be used to search the TV Maze API for a given show
-        var queryUrl = "http://www.omdbapi.com/?t=" + request + "&y=&plot=short&apikey=trilogy";
+        var queryUrl = "http://www.omdbapi.com/?t=" + req + "&y=&plot=short&apikey=a248ec5c";
         axios.get(queryUrl)
         .then(function(response) {
             var jsonData = response.data;
-            console.log(jsonData);
             var movieData = [
             "Title: " + jsonData.Title,
             "Year: " + jsonData.Year,
-            "Genre(s): " + jsonData.Year,
-            "Rating: " + jsonData.rating.average,
-            "Network: " + jsonData.network.name,
-            "Summary: " + jsonData.summary
+            "Rating (IMDB): " + jsonData.imdbRating,
+            "Rating (Rotten Tomatoes): " + jsonData.imdbVotes,
+            "Country: " + jsonData.Country,
+            "Language: " + jsonData.Language,
+            "Plot: " + jsonData.Plot,
+            "Actors: " + jsonData.Actors
             ].join("\n\n");
             console.log(movieData);
         });
     };
-    findShow();
+    findShow(request);
 }
 else if (command === "do-what-it-says") {
     console.log("As you wish");
