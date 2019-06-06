@@ -20,11 +20,17 @@ for (i = 3; i < argument.length; i++) {
 }
 var request = tempArray.join(" ");
 
-console.log("===============");
-console.log("So far we have your command: " + command + "\nand your request: " + request);
+// initialize helper function
+var displayInitial = () => {
+    console.log("===============");
+    console.log("So far we have your command: " + command + "\nand your request: " + request);
+}
 
+
+
+// If blocks to check argv arguments
 if(!command) {
-    command = "spotify-this-song";
+    console.log("Use a command to retrieve data!")
 }
 
 else if (!request) {
@@ -36,7 +42,19 @@ else if (command === "concert-this") {
     console.log("Searching for Concert");
 }
 else if (command === "spotify-this-song") {
-    console.log("Searching for Song");
+    displayInitial();
+    spotify
+        .search({ type: 'track', query: request })
+        .then(function(response) {
+    var data = response.tracks.items[0];
+    var songData = [
+    "\nArtist: " + data.artists[0].name,
+    "Song Name: " + data.name,
+    "Link: " + data.preview_url,
+    "Album: " + data.album.name
+    ].join("\n\n");
+    console.log(songData);
+  });
 }
 else if (command === "movie-this") {
     var findShow = function(req) {
@@ -58,6 +76,7 @@ else if (command === "movie-this") {
             console.log(movieData);
         });
     };
+    displayInitial();
     findShow(request);
 }
 else if (command === "do-what-it-says") {
