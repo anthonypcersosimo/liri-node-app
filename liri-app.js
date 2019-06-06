@@ -39,7 +39,21 @@ else if (!request) {
 }
 
 else if (command === "concert-this") {
-    console.log("Searching for Concert");
+    var findConcert = function(req) {
+        var queryUrl = "https://rest.bandsintown.com/artists/" + req + "/events?app_id=codingbootcamp";
+        axios.get(queryUrl)
+        .then(function(response) {
+            var jsonData = response.data[0];
+            var concertData = [
+            "\nVenue: " + jsonData.venue.name,
+            "Location: " + jsonData.venue.city,
+            "Date: " + jsonData.datetime
+            ].join("\n\n");
+            console.log(concertData);
+        });
+    };
+    displayInitial();
+    findConcert(request);
 }
 else if (command === "spotify-this-song") {
     displayInitial();
@@ -58,13 +72,12 @@ else if (command === "spotify-this-song") {
 }
 else if (command === "movie-this") {
     var findShow = function(req) {
-        // The following URL can be used to search the TV Maze API for a given show
         var queryUrl = "http://www.omdbapi.com/?t=" + req + "&y=&plot=short&apikey=a248ec5c";
         axios.get(queryUrl)
         .then(function(response) {
             var jsonData = response.data;
             var movieData = [
-            "Title: " + jsonData.Title,
+            "\nTitle: " + jsonData.Title,
             "Year: " + jsonData.Year,
             "Rating (IMDB): " + jsonData.imdbRating,
             "Rating (Rotten Tomatoes): " + jsonData.imdbVotes,
