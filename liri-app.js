@@ -4,6 +4,7 @@ var spotify = require('node-spotify-api');
 var dotenv = require('dotenv').config();
 var moment = require("moment");
 var keys = require("./keys.js");
+var fs = require("fs");
 // variable to access Spotify keys
 var spotify = new spotify(keys.spotify);
 
@@ -42,8 +43,9 @@ else if (command === "concert-this") {
     var findConcert = function(req) {
         var queryUrl = "https://rest.bandsintown.com/artists/" + req + "/events?app_id=codingbootcamp";
         axios.get(queryUrl)
-        .then(function(response) {
-            var jsonData = response.data[0];
+        .then(function(data) {
+            var jsonData = data[0];
+            console.log(jsonData);
             var concertData = [
             "\nVenue: " + jsonData.venue.name,
             "Location: " + jsonData.venue.city,
@@ -61,6 +63,7 @@ else if (command === "spotify-this-song") {
         .search({ type: 'track', query: request })
         .then(function(response) {
     var data = response.tracks.items[0];
+    console.log(data);
     var songData = [
     "\nArtist: " + data.artists[0].name,
     "Song Name: " + data.name,
@@ -93,5 +96,13 @@ else if (command === "movie-this") {
     findShow(request);
 }
 else if (command === "do-what-it-says") {
-    console.log("As you wish");
+    fs.readFile("./random.txt", "UTF8", function(err, data) {
+        if (err) {
+            console.log(err);
+        };
+        var txtData = data;
+        // Select the first value in the CSV and store it as a variable to pass into the spotify API
+        // Create spoitfy promise and display data
+        console.log(txtData);
+    });
 };
